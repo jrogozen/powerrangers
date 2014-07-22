@@ -47,6 +47,7 @@ class PowerRanger < Person
 	def initialize(name, color="green")
 		super(name)
 		@color = color
+		@strength = rand(1..15)
 		puts "#{@name} is a #{@color.capitalize} Power Ranger!"
 	end
 
@@ -54,16 +55,59 @@ class PowerRanger < Person
 		p @caffeine_level
 	end
 
+	def show_strength
+		p @strength
+	end
+
+	#requires variable name, not string name
+	def punch(person)
+		if caffeine_level > 0
+			@punch_strength = rand(0..@strength)
+			if @punch_strength > 5
+				@caffeine_level -= 50
+				puts "#{person.name.capitalize} got punched so hard he's doing sumersaults in the air!"
+			else 
+				puts "#{person.name.capitalize} got punched. #{person.name} screams and runs away in an extremely un-manly manner."
+			end
+		else
+			puts "Need more caffeine to punch. Try drinking coffee."
+		end
+
+		#reset caffeine level to zero if it's below
+		if @caffeine_level < 0 
+			@caffeine_level = 0
+		end
+	end
+
+	def use_megazord(person)
+		if @caffeine_level > 0
+			@punch_strength = 5000
+			puts "The unparalleled wrath of megazord has been unleashed!"
+			if rand(0..10) > 5
+				puts "#{person.name} is reduced to rubble."
+			else 
+				puts "#{person.name} dodges! Lol!"
+			end
+			#drain all energy
+			@caffeine_level = 0
+			puts "#{self.name} sure seems tired."
+		end
+	end
+
 end
 
 class EvilNinja
 end
 
-# jon = Person.new("Jon")
-# jon.caffeine_level = 10
-# jon.run
-# jon.scream
-# jon.drink_coffee(4)
-# jon.run
+jon = Person.new("Jon")
+jon.caffeine_level = 10
+jon.run
+jon.scream
+jon.drink_coffee(4)
+jon.run
 
 mike = PowerRanger.new("Mike")
+mike.show_strength
+mike.punch(jon)
+mike.drink_coffee
+mike.use_megazord(jon)
