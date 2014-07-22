@@ -80,18 +80,32 @@ class PowerRanger < Person
 	end
 
 	def use_megazord(person)
-		if @caffeine_level > 0
+		if @caffeine_level > 50
 			@punch_strength = 5000
 			puts "The unparalleled wrath of megazord has been unleashed!"
 			if rand(0..10) > 5
 				puts "#{person.name} is reduced to rubble."
 			else 
-				puts "#{person.name} dodges! Lol!"
+				puts "#{person.name} dodges! Bummer."
 			end
 			#drain all energy
 			@caffeine_level = 0
-			puts "#{self.name} sure seems tired."
+			puts "#{self.name} sure seems tired. Get this guy some coffee!"
+		else
+			puts "Too tired to use the awesome megazord. Drink more coffee or take a rest."
 		end
+	end
+
+	#rest sets caffeine to baseline and adds strength
+	def rest(hours)
+		#permanently add strength up to a point
+		hours.times do
+			if @strength < 20
+				@strength += rand(0..3)
+				puts "#{self.name} feels stronger!"
+			end
+		end
+		@caffeine_level = 51
 	end
 
 end
@@ -110,4 +124,7 @@ mike = PowerRanger.new("Mike")
 mike.show_strength
 mike.punch(jon)
 mike.drink_coffee
+mike.use_megazord(jon)
+mike.use_megazord(jon)
+mike.rest(2)
 mike.use_megazord(jon)
