@@ -39,6 +39,11 @@ class Person
 			puts "#{@name} could use a Redbull."
 		end
 	end
+
+	def show_caffeine_level
+		p @caffeine_level
+	end
+
 end
 
 class PowerRanger < Person
@@ -51,10 +56,6 @@ class PowerRanger < Person
 		puts "#{@name} is a #{@color.capitalize} Power Ranger!"
 	end
 
-	def show_caffeine_level
-		p @caffeine_level
-	end
-
 	def show_strength
 		p @strength
 	end
@@ -65,12 +66,12 @@ class PowerRanger < Person
 			@punch_strength = rand(0..@strength)
 			if @punch_strength > 5
 				@caffeine_level -= 50
-				puts "#{person.name.capitalize} got punched so hard he's doing sumersaults in the air!"
+				puts "#{self.name} punches #{person.name.capitalize} so hard he does sumersaults in the air!"
 			else 
-				puts "#{person.name.capitalize} got punched. #{person.name} screams and runs away in an extremely un-manly manner."
+				puts "#{self.name} punches #{person.name.capitalize} so hard he screams and runs away in an extremely un-flattering anner."
 			end
 		else
-			puts "Need more caffeine to punch. Try drinking coffee."
+			puts "#{self.name} needs more caffeine to punch. Try drinking coffee."
 		end
 
 		#reset caffeine level to zero if it's below
@@ -82,8 +83,10 @@ class PowerRanger < Person
 	def use_megazord(person)
 		if @caffeine_level > 50
 			@punch_strength = 5000
-			puts "The unparalleled wrath of megazord has been unleashed!"
+			puts "The unparalleled wrath of megazord has been unleashed by #{self.name}!"
 			if rand(0..10) > 5
+				#set target person's caffeine to zero
+				person.caffeine_level = 0
 				puts "#{person.name} is reduced to rubble."
 			else 
 				puts "#{person.name} dodges! Bummer."
@@ -92,7 +95,7 @@ class PowerRanger < Person
 			@caffeine_level = 0
 			puts "#{self.name} sure seems tired. Get this guy some coffee!"
 		else
-			puts "Too tired to use the awesome megazord. Drink more coffee or take a rest."
+			puts "#{self.name} is too tired to use the awesome megazord. Drink more coffee or take a rest."
 		end
 	end
 
@@ -110,21 +113,123 @@ class PowerRanger < Person
 
 end
 
-class EvilNinja
+class EvilNinja < Person
+	attr_accessor :strength, :evilness
+
+	def initialize(name, evilness=1)
+		super(name)
+		@strength = rand(1..15)
+		@evilness = evilness
+		puts "#{@name} is a level #{@evilness} evil ninja."
+	end
+
+	def show_evilness
+		p @evilness
+	end
+
+	#requires variable name, not string name
+	def punch(person)
+		if caffeine_level > 0
+			@punch_strength = rand(0..@strength)
+			if @punch_strength > 5
+				@caffeine_level -= 50
+				puts "#{self.name} punches #{person.name.capitalize} so hard he does sumersaults in the air!"
+			else 
+				puts "#{self.name} punches #{person.name.capitalize} so hard he screams and run away in an extremely unflattering manner."
+			end
+		else
+			puts "#{self.name} needs more caffeine to punch. Try drinking coffee."
+		end
+
+		#reset caffeine level to zero if it's below
+		if @caffeine_level < 0 
+			@caffeine_level = 0
+		end
+	end
+
+	#drain caffeine level of person (not string) to zero
+	def cause_mayhem(person)
+		if person.caffeine_level > 0
+			person.caffeine_level = 0
+			puts "#{person.name} has had his caffeine level drained to zero! Bummer."
+		else
+			puts "#{person.name} already has less than zero caffeine!"
+		end
+	end
 end
 
-jon = Person.new("Jon")
-jon.caffeine_level = 10
-jon.run
-jon.scream
-jon.drink_coffee(4)
-jon.run
+# jon = Person.new("Jon")
+# jon.caffeine_level = 10
+# jon.run
+# jon.scream
+# jon.drink_coffee(4)
+# jon.run
 
-mike = PowerRanger.new("Mike")
-mike.show_strength
-mike.punch(jon)
-mike.drink_coffee
-mike.use_megazord(jon)
-mike.use_megazord(jon)
-mike.rest(2)
-mike.use_megazord(jon)
+# mike = PowerRanger.new("Mike")
+# mike.show_strength
+# mike.punch(jon)
+# mike.drink_coffee
+# mike.use_megazord(jon)
+# mike.use_megazord(jon)
+# mike.rest(2)
+# mike.use_megazord(jon)
+
+# tommy = EvilNinja.new("tommy", 3)
+
+#fight scene
+def fight_scene
+	jason = PowerRanger.new("Jason", "Red")
+	tommy = PowerRanger.new("tommy", "Green")
+	jon = Person.new("Jon")
+	howard = Person.new("Howard")
+	evilGuy_a = EvilNinja.new("Evil Guy 1")
+	evilGuy_b = EvilNinja.new("Evil Guy 2")
+
+	puts "Two innocent bystanders are attacked by evil ninjas."
+	jon.scream
+	howard.scream
+	jon.run
+	howard.drink_coffee
+	howard.run
+
+	puts "The Power Rangers arrive!"
+	jason.punch(evilGuy_a)
+	tommy.punch(evilGuy_b)
+	jason.rest(2)
+	tommy.drink_coffee
+
+	puts "The Evil Ninjas fight back."
+	evilGuy_a.punch(tommy)
+	evilGuy_b.punch(tommy)
+	evilGuy_a.cause_mayhem(jason)
+
+	puts "The Power Rangers try Megazord"
+	jason.use_megazord(evilGuy_a)
+	evilGuy_a.punch(jason)
+
+	puts "Cmon Tommy!"
+	tommy.use_megazord(evilGuy_a)
+	tommy.drink_coffee(10)
+	tommy.use_megazord(evilGuy_b)
+
+	puts "Did the Power Rangers save the day?"
+
+	ninja_array = [evilGuy_a, evilGuy_b]
+	win = "yes"
+
+	ninja_array.each do |ninja|
+		# p ninja.show_caffeine_level
+		if ninja.caffeine_level > 0
+			win = "no"
+		end
+	end
+
+	if win == "yes"
+		puts "Yes!"
+	else
+		puts "No :(."
+	end
+
+end
+
+fight_scene
